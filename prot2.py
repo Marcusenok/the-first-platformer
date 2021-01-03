@@ -2,7 +2,6 @@ import pygame
 
 pygame.init()
 screen = pygame.display.set_mode((700, 1000))
-pygame.mixer.music.load("music.mp3")
 
 
 def start_screen():
@@ -34,9 +33,9 @@ def start_screen():
         pygame.display.flip()
 
 
-MOVE_SPEED = 13
-JUMP_POWER = 16
-GRAVITY = 2
+MOVE_SPEED = 15
+JUMP_POWER = 20
+GRAVITY = 1.6
 
 
 class Player(pygame.sprite.Sprite):
@@ -45,9 +44,9 @@ class Player(pygame.sprite.Sprite):
         self.xvel = 0
         self.startX = x
         self.startY = y
-        self.image = pygame.Surface((20, 20))
+        self.image = pygame.Surface((30, 50))
         self.image.fill(pygame.Color('red'))
-        self.rect = pygame.Rect(x, y, 22, 22)  # прямоугольный объект
+        self.rect = pygame.Rect(x, y, 30, 50)  # прямоугольный объект
         self.yvel = 0  # скорость вертикального перемещения
         self.onGround = False  # На земле ли я?
 
@@ -93,9 +92,9 @@ class Player(pygame.sprite.Sprite):
 class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((20, 20))
+        self.image = pygame.Surface((30, 30))
         self.image.fill(pygame.Color(0, 255, 255))
-        self.rect = pygame.Rect(x, y, 22, 22)
+        self.rect = pygame.Rect(x, y, 30, 30)
 
 
 class Camera(object):
@@ -125,13 +124,11 @@ def camera_configure(camera, target_rect):
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((900, 660))
-    bg = pygame.Surface((1000, 2000))
+    screen = pygame.display.set_mode((1200, 800))
+    bg = pygame.Surface((1200, 800))
     bg.fill(pygame.Color('black'))
-    pygame.mixer.music.play(-1)
-    flPause = False
     timer = pygame.time.Clock()
-    player = Player(50, 595)
+    player = Player(50, 1500)
     left = right = False
     up = False
 
@@ -146,8 +143,8 @@ def main():
                 pf = Platform(x, y)
                 entities.add(pf)
                 platforms.append(pf)
-            x += 22  # блоки платформы ставятся на ширине блоков
-        y += 22  # то же самое и с высотой
+            x += 30  # блоки платформы ставятся на ширине блоков
+        y += 30  # то же самое и с высотой
         x = 0
 
     camera = Camera(camera_configure)
@@ -173,14 +170,6 @@ def main():
                 up = True
             if event.type == pygame.KEYUP and event.key == pygame.K_UP:
                 up = False
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    flPause = not flPause
-                    if flPause:
-                        pygame.mixer.music.pause()
-                    else:
-                        pygame.mixer.music.unpause()
 
         screen.blit(bg, (0, 0))
         player.update(left, right, up, platforms)
