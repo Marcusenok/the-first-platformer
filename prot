@@ -34,8 +34,8 @@ def start_screen():
         pygame.display.flip()
 
 
-MOVE_SPEED = 13
-JUMP_POWER = 16
+MOVE_SPEED = 16
+JUMP_POWER = 13
 GRAVITY = 2
 
 
