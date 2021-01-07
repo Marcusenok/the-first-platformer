@@ -17,14 +17,14 @@ def start_screen():
     fon = pygame.transform.scale(pygame.image.load('fon.jpg'), (800, 1000))
     screen.blit(fon, (0, 0))
     a = pygame.font.Font(None, 30)
-    text_coord = 50
+    text_coord = 20
     pygame.display.set_caption("Платформер")
     bt = Button()
-    bt.create_button(screen, (255, 0, 225), 30, 330, 100, 40, 100, '1 lvl', (0, 255, 0))
+    bt.create_button(screen, (255, 0, 225), 30, 300, 150, 50, 100, '1 lvl', (0, 255, 0))
     bt1 = Button()
-    bt1.create_button(screen, (255, 0, 225), 330, 330, 100, 40, 100, '2 lvl', (0, 255, 0))
+    bt1.create_button(screen, (255, 0, 225), 320, 300, 150, 50, 100, '2 lvl', (0, 255, 0))
     bt2 = Button()
-    bt2.create_button(screen, (255, 0, 225), 630, 330, 100, 40, 100, '3 lvl', (0, 255, 0))
+    bt2.create_button(screen, (255, 0, 225), 590, 300, 150, 50, 100, '3 lvl', (0, 255, 0))
     for line in intro_text:
         string_rendered = a.render(line, 1, pygame.Color(200, 200, 255))
         intro_rect = string_rendered.get_rect()
