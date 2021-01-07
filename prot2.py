@@ -2,7 +2,7 @@ import pygame
 
 pygame.init()
 screen = pygame.display.set_mode((775, 400))
-pygame.mixer.music.load("music.mp3")
+pygame.mixer.music.load("geometry dash.mp3")
 
 
 def start_screen():
@@ -48,7 +48,7 @@ def start_screen():
         pygame.display.flip()
 
 
-MOVE_SPEED = 19
+MOVE_SPEED = 15
 JUMP_POWER = 14
 GRAVITY = 2
 
