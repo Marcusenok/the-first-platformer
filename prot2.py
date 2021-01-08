@@ -41,14 +41,13 @@ def start_screen():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
-                print(mouse_pos)
                 bt.pressed(mouse_pos)
                 bt1.pressed(mouse_pos)
                 bt2.pressed(mouse_pos)
         pygame.display.flip()
 
 
-MOVE_SPEED = 15
+MOVE_SPEED = 14
 JUMP_POWER = 14
 GRAVITY = 2
 
@@ -109,7 +108,7 @@ class Player(pygame.sprite.Sprite):
 
     def die(self):
         pygame.time.wait(500)
-        self.teleporting(50, 1000)  # перемещаемся в начальные координаты
+        self.teleporting(50, 1600)  # перемещаемся в начальные координаты
 
     def teleporting(self, goX, goY):
         self.rect.x = goX
@@ -261,7 +260,6 @@ class Button:
             if mouse[1] > self.rect.topleft[1]:
                 if mouse[0] < self.rect.bottomright[0]:
                     if mouse[1] < self.rect.bottomright[1]:
-                        print('Some button was pressed!')
                         return main()
                     else:
                         return False
