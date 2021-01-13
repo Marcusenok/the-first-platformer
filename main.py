@@ -12,7 +12,7 @@ def start_screen():
                   '    Я сделал для тебя игру и играть в благородство я не собираюсь',
                   'Чтобы выжить в этом опасном мире тебе придётся научится полагаться',
                   'только на себя. Запомни что двигаешься ты только на стрелочки и никаких',
-                  'тебе WASD усёк! Дальше, твоя задача пройти три испытания и добраться',
+                  'тебе WASD усёк! Дальше, твоя задача пройти два испытания и добраться',
                   'до конца живым и невредимым. Будь осторожен на уровнях есть',
                   'смертельные ловушки на которые не желательно напарываться.',
                   'Давай быстренько метнулся кабанчиком туда обратно в темпе, в темпе!!!']
@@ -22,11 +22,9 @@ def start_screen():
     text_coord = 20
     pygame.display.set_caption("Платформер")
     bt = Button()
-    bt.create_button(screen, (255, 0, 225), 30, 300, 150, 50, 100, '1 lvl', (0, 255, 0))
+    bt.create_button(screen, (255, 0, 225), 100, 300, 150, 50, 100, '1 lvl', (0, 255, 0))
     bt1 = Button()
-    bt1.create_button(screen, (255, 0, 225), 320, 300, 150, 50, 100, '2 lvl', (0, 255, 0))
-    bt2 = Button()
-    bt2.create_button(screen, (255, 0, 225), 590, 300, 150, 50, 100, '3 lvl', (0, 255, 0))
+    bt1.create_button(screen, (255, 0, 225), 520, 300, 150, 50, 100, '2 lvl', (0, 255, 0))
     for line in intro_text:
         string_rendered = a.render(line, 1, pygame.Color(200, 200, 255))
         intro_rect = string_rendered.get_rect()
@@ -47,8 +45,6 @@ def start_screen():
                 if bt.pressed(mouse_pos):
                     LEVEL = 1
                 if bt1.pressed(mouse_pos):
-                    LEVEL = 2
-                if bt2.pressed(mouse_pos):
                     LEVEL = 2
         if LEVEL != 0:
             main()
