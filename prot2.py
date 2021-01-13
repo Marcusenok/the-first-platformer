@@ -1,13 +1,15 @@
 import pygame
+import sys
 
 pygame.init()
 screen = pygame.display.set_mode((775, 400))
 pygame.mixer.music.load("geometry dash.mp3")
+LEVEL = 0
 
 
 def start_screen():
     intro_text = ['                                          Здаров захожий!',
-                  '    Я сделал для тебя игру и играть в благородство играть не собираюсь',
+                  '    Я сделал для тебя игру и играть в благородство я не собираюсь',
                   'Чтобы выжить в этом опасном мире тебе придётся научится полагаться',
                   'только на себя. Запомни что двигаешься ты только на стрелочки и никаких',
                   'тебе WASD усёк! Дальше, твоя задача пройти три испытания и добраться',
@@ -34,6 +36,7 @@ def start_screen():
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
 
+    global LEVEL
     run = True
     while run:
         for event in pygame.event.get():
@@ -41,9 +44,14 @@ def start_screen():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
-                bt.pressed(mouse_pos)
-                bt1.pressed(mouse_pos)
-                bt2.pressed(mouse_pos)
+                if bt.pressed(mouse_pos):
+                    LEVEL = 1
+                if bt1.pressed(mouse_pos):
+                    LEVEL = 2
+                if bt2.pressed(mouse_pos):
+                    LEVEL = 2
+        if LEVEL != 0:
+            main()
         pygame.display.flip()
 
 
@@ -88,6 +96,10 @@ class Player(pygame.sprite.Sprite):
             if pygame.sprite.collide_rect(self, p):  # если есть пересечение платформы с игроком
                 if isinstance(p, BlockDie):  # если пересакаемый блок - blocks.BlockDie или Monster
                     self.die()  # умираем
+                if isinstance(p, BlockDie_1):  # если пересакаемый блок - blocks.BlockDie или Monster
+                    self.die()  # умираем
+                if isinstance(p, BlockFin):  # если пересакаемый блок - blocks.BlockDie или Monster
+                    self.fin()  # выигрываем
 
             if pygame.sprite.collide_rect(self, p):  # если есть пересечение платформы с игроком
 
@@ -114,6 +126,24 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = goX
         self.rect.y = goY
 
+    def fin(self):
+        global LEVEL
+        if LEVEL == 2:
+            pygame.font.init()
+            sc = pygame.display.set_mode((700, 350))
+            f1 = pygame.font.Font(None, 70)
+            text1 = f1.render('ТЫ ВСЁ ПРОШЁЛ!', True,
+                              (180, 0, 0))
+            sc.blit(text1, (120, 140))
+            pygame.display.update()
+            while 1:
+                for i in pygame.event.get():
+                    if i.type == pygame.QUIT:
+                        sys.exit()
+        elif LEVEL == 1:
+            LEVEL = 2
+            main()
+
 
 class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -128,6 +158,21 @@ class BlockDie(Platform):
         Platform.__init__(self, x, y)
         self.image = pygame.Surface((10, 10))
         self.image = pygame.image.load('chip_.png')
+        self.rect = pygame.Rect(x, y, 10, 10)
+
+
+class BlockDie_1(Platform):
+    def __init__(self, x, y):
+        Platform.__init__(self, x, y)
+        self.image = pygame.Surface((10, 10))
+        self.image = pygame.image.load('dieBlock.png')
+        self.rect = pygame.Rect(x, y, 10, 10)
+
+
+class BlockFin(Platform):
+    def __init__(self, x, y):
+        Platform.__init__(self, x, y)
+        self.image = pygame.Surface((10, 10))
         self.rect = pygame.Rect(x, y, 10, 10)
 
 
@@ -167,11 +212,17 @@ def main():
     player = Player(50, 1600)
     left = right = False
     up = False
+    global LEVEL
 
     entities = pygame.sprite.Group()  # Все объекты
     platforms = []  # то, во что мы будем врезаться или опираться
     entities.add(player)
-    level = open('level_1.txt', 'r')
+    if LEVEL == 1:
+        level = open('level_1.txt', 'r')
+    elif LEVEL == 2:
+        level = open('level_2.txt', 'r')
+    elif LEVEL == 2:
+        level = open('level_2.txt', 'r')
     x = y = 0
     for row in level:  # вся строка
         for col in row:  # каждый символ
@@ -181,6 +232,14 @@ def main():
                 platforms.append(pf)
             if col == "*":
                 bd = BlockDie(x, y)
+                entities.add(bd)
+                platforms.append(bd)
+            if col == "1":
+                bd = BlockDie_1(x, y)
+                entities.add(bd)
+                platforms.append(bd)
+            if col == "@":
+                bd = BlockFin(x, y)
                 entities.add(bd)
                 platforms.append(bd)
             x += 22  # блоки платформы ставятся на ширине блоков
@@ -194,6 +253,7 @@ def main():
         timer.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                LEVEL = 0
                 run = False
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
@@ -260,7 +320,7 @@ class Button:
             if mouse[1] > self.rect.topleft[1]:
                 if mouse[0] < self.rect.bottomright[0]:
                     if mouse[1] < self.rect.bottomright[1]:
-                        return main()
+                        return True
                     else:
                         return False
                 else:
